@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cartomante — Magia e Sabedoria nas Cartas</title>
+<meta name="description" content="Consultas de tarô e cartomancia com ética, respeito e clareza. Perguntas objetivas, perguntas detalhadas, Taça do Amor e Templo de Afrodite / Templo do Diabo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --deep-purple:#2E1A47;
+    --purple-soft:#3E2568;
+    --midnight:#150C26;
+    --gold:#C9A25D;
+    --gold-light:#E7CD93;
+    --gold-dim:rgba(201,162,93,0.35);
+    --beige:#F3EAD9;
+    --ivory:#FBF7F0;
+    --deep-blue:#1B2A4A;
+    --ink:#2A2438;
+    --ink-soft:#5A5068;
+    --line: rgba(201,162,93,0.35);
+    --shadow: 0 20px 50px rgba(24,14,41,0.25);
+    --radius: 18px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--beige);
+    color:var(--ink);
+    font-family:'Lora', serif;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    position:relative;
+  }
+  /* subtle mystical wallpaper texture across light sections */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    opacity:.05;
+    background-image:
+      radial-gradient(circle at 10px 10px, var(--deep-purple) 1.4px, transparent 1.6px);
+    background-size:46px 46px;
+  }
+  h1,h2,h3,h4{
+    font-family:'Playfair Display', serif;
+    color:var(--deep-purple);
+    margin:0 0 .5em 0;
+    letter-spacing:.01em;
+  }
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  .container{
+    max-width:1120px;
+    margin:0 auto;
+    padding:0 28px;
+    position:relative;
+    z-index:2;
+  }
+  .eyebrow{
+    font-family:'Cinzel', 'Lora', serif;
+    text-transform:uppercase;
+    letter-spacing:.24em;
+    font-size:.72rem;
+    color:var(--gold);
+    font-weight:600;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before, .eyebrow::after{
+    content:"";
+    width:22px;height:1px;
+    background:var(--gold);
+    opacity:.7;
+  }
+  .section{
+    padding:100px 0;
+    position:relative;
+    overflow:hidden;
+  }
+  .section-title{
+    font-size:clamp(1.8rem, 3vw, 2.6rem);
+    margin-top:.4em;
+  }
+  .section-intro{
+    max-width:640px;
+    color:var(--ink-soft);
+    font-size:1.05rem;
+    position:relative;
+    z-index:2;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:15px 32px;
+    border-radius:999px;
+    font-family:'Lora', serif;
+    font-weight:600;
+    font-size:.95rem;
+    letter-spacing:.03em;
+    cursor:pointer;
+    border:1px solid transparent;
+    transition:transform .25s ease, box-shadow .25s ease, background .25s ease;
+  }
+  .btn-primary{
+    background:linear-gradient(135deg, var(--gold-light), var(--gold));
+    color:var(--midnight);
+    box-shadow:0 12px 30px rgba(201,162,93,0.35);
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(201,162,93,0.5);}
+  .btn-ghost{
+    background:transparent;
+    border-color:rgba(255,255,255,0.4);
+    color:var(--ivory);
+  }
+  .btn-ghost:hover{background:rgba(255,255,255,0.08);}
+
+  /* ===== ornate divider between sections ===== */
+  .divider{
+    position:relative;
+    height:64px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:2;
+  }
+  .divider::before, .divider::after{
+    content:"";
+    height:1px;
+    flex:1;
+    max-width:220px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .divider .glyph{
+    margin:0 18px;
+    color:var(--gold);
+    font-size:1.1rem;
+    letter-spacing:.3em;
+  }
+  .divider.on-dark .glyph{color:var(--gold-light);}
+  .divider.on-dark::before, .divider.on-dark::after{background:linear-gradient(90deg, transparent, var(--gold-light), transparent);}
+
+  /* ===== decorative corner tarot cards ===== */
+  .deco-card{
+    position:absolute;
+    width:64px;
+    height:104px;
+    border-radius:8px;
+    border:1.5px solid var(--gold);
+    background:linear-gradient(160deg, var(--ivory), var(--beige));
+    box-shadow:0 14px 26px rgba(24,14,41,0.25);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.4rem;
+    color:var(--deep-purple);
+    z-index:1;
+    opacity:.9;
+  }
+  .deco-card.dark{
+    background:linear-gradient(160deg, #3E2568, var(--midnight));
+    color:var(--gold-light);
+    border-color:var(--gold-light);
+  }
+  .deco-card::before{
+    content:"";
+    position:absolute;
+    inset:6px;
+    border:1px solid currentColor;
+    opacity:.35;
+    border-radius:4px;
+  }
+  .deco-card::after{
+    content:attr(data-glyph);
+    position:absolute;
+    top:6px;
+    font-size:.6rem;
+    letter-spacing:.06em;
+  }
+  .deco-card.c1{ top:-18px; left:-10px; transform:rotate(-14deg); }
+  .deco-card.c2{ top:30px; left:34px; transform:rotate(8deg); }
+  .deco-card.c3{ bottom:-24px; right:-14px; transform:rotate(12deg); }
+  .deco-card.c4{ bottom:20px; right:40px; transform:rotate(-10deg); }
+  .deco-card.float{ animation:cardFloat 7s ease-in-out infinite; }
+  @keyframes cardFloat{
+    0%,100%{ transform:translateY(0) rotate(var(--r, -14deg)); }
+    50%{ transform:translateY(-10px) rotate(var(--r, -14deg)); }
+  }
+  .deco-corner{ position:absolute; width:140px; height:170px; pointer-events:none; }
+  .deco-corner.top-left{ top:20px; left:20px; }
+  .deco-corner.top-right{ top:20px; right:20px; }
+  .deco-corner.bottom-left{ bottom:20px; left:20px; }
+  .deco-corner.bottom-right{ bottom:20px; right:20px; }
+
+  @media (max-width:760px){
+    .deco-corner{ display:none; }
+  }
+
+  /* ===== zodiac ring ===== */
+  .zodiac-ring{
+    position:absolute;
+    width:220px;height:220px;
+    border-radius:50%;
+    border:1px dashed var(--gold-dim);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    animation:spin 60s linear infinite;
+    z-index:0;
+  }
+  .zodiac-ring span{
+    position:absolute;
+    color:var(--gold);
+    opacity:.55;
+    font-size:1rem;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  /* ===== Header ===== */
+  header{
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:rgba(21,12,38,0.92);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(201,162,93,0.25);
+  }
+  .nav-wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 28px;
+    max-width:1120px;
+    margin:0 auto;
+  }
+  .brand{
+    font-family:'Cinzel Decorative', 'Playfair Display', serif;
+    color:var(--gold-light);
+    font-size:1.15rem;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .brand .moon{font-size:1.1rem;}
+  nav ul{
+    display:flex;
+    gap:30px;
+    list-style:none;
+    margin:0;
+    padding:0;
+  }
+  nav a{
+    color:var(--ivory);
+    font-size:.92rem;
+    letter-spacing:.02em;
+    position:relative;
+    padding:4px 0;
+  }
+  nav a::after{
+    content:"";
+    position:absolute;
+    left:0;bottom:-2px;
+    width:0;height:1px;
+    background:var(--gold);
+    transition:width .3s ease;
+  }
+  nav a:hover::after{width:100%;}
+  .menu-toggle{
+    display:none;
+    background:none;border:none;
+    color:var(--ivory);
+    font-size:1.6rem;
+    cursor:pointer;
+  }
+
+  @media (max-width:860px){
+    nav{
+      position:fixed;
+      top:64px;left:0;right:0;
+      background:var(--midnight);
+      flex-direction:column;
+      max-height:0;
+      overflow:hidden;
+      transition:max-height .35s ease;
+      border-bottom:1px solid var(--line);
+    }
+    nav.open{max-height:400px;}
+    nav ul{
+      flex-direction:column;
+      padding:20px 28px 28px;
+      gap:20px;
+    }
+    .menu-toggle{display:block;}
+  }
+
+  /* ===== Starfield backgrounds ===== */
+  .stars{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:0;
+  }
+  .stars span{
+    position:absolute;
+    width:2px;height:2px;
+    background:var(--gold-light);
+    border-radius:50%;
+    opacity:.7;
+    animation:twinkle 4s ease-in-out infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{opacity:.15;}
+    50%{opacity:.9;}
+  }
+  .constellation{
+    position:absolute;
+    inset:0;
+    z-index:0;
+    opacity:.35;
+  }
+
+  /* ===== Cartas de baralho/tarô decorativas no fundo ===== */
+  .card-scatter{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+    z-index:0;
+    pointer-events:none;
+  }
+  .scatter-card{
+    position:absolute;
+    width:76px;
+    height:122px;
+    border-radius:9px;
+    border:1.5px solid rgba(231,205,147,0.55);
+    background:
+      linear-gradient(160deg, rgba(75,45,120,0.55), rgba(21,12,38,0.7));
+    box-shadow:0 14px 26px rgba(0,0,0,0.3);
+    opacity:.4;
+  }
+  .scatter-card::before{
+    content:"";
+    position:absolute;
+    inset:6px;
+    border:1px solid rgba(231,205,147,0.4);
+    border-radius:6px;
+  }
+  .scatter-card::after{
+    content:attr(data-suit);
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.7rem;
+    color:rgba(231,205,147,0.7);
+  }
+  .scatter-card .idx{
+    position:absolute;
+    font-size:.6rem;
+    color:rgba(231,205,147,0.75);
+    letter-spacing:.02em;
+  }
+  .scatter-card .idx.tl{ top:8px; left:9px; }
+  .scatter-card .idx.br{ bottom:8px; right:9px; transform:rotate(180deg); }
+  .scatter-card.small{ width:56px; height:90px; }
+  .scatter-card.small::after{ font-size:1.2rem; }
+  .scatter-card.small .idx{ font-size:.5rem; }
+
+  .scatter-card.p1{ top:6%;  left:3%;  transform:rotate(-13deg); }
+  .scatter-card.p2{ top:62%; left:6%;  transform:rotate(11deg); }
+  .scatter-card.p3{ top:10%; left:87%; transform:rotate(13deg); }
+  .scatter-card.p4{ top:66%; left:89%; transform:rotate(-10deg); }
+  .scatter-card.p5{ top:38%; left:1%;  transform:rotate(7deg); }
+  .scatter-card.p6{ top:4%;  left:46%; transform:rotate(-6deg); }
+  .scatter-card.p7{ top:76%; left:44%; transform:rotate(9deg); }
+  .scatter-card.p8{ top:42%; left:93%; transform:rotate(-15deg); }
+
+  @media(max-width:760px){
+    .card-scatter{ display:none; }
+  }
+
+  /* ===== Hero ===== */
+  .hero{
+    position:relative;
+    background:radial-gradient(120% 120% at 50% -10%, #3B2260 0%, var(--deep-purple) 45%, var(--midnight) 100%);
+    color:var(--ivory);
+    padding:130px 0 60px;
+    overflow:hidden;
+    text-align:center;
+  }
+  .hero-content{
+    position:relative;
+    z-index:2;
+    max-width:720px;
+    margin:0 auto;
+  }
+  .hero-tagline{
+    font-family:'Cinzel Decorative', 'Playfair Display', serif;
+    color:var(--gold-light);
+    font-size:1.05rem;
+    letter-spacing:.06em;
+    margin:0 0 18px;
+    text-shadow:0 2px 12px rgba(0,0,0,0.4);
+  }
+  .hero .eyebrow{color:var(--gold-light);}
+  .hero .eyebrow::before, .hero .eyebrow::after{background:var(--gold-light);}
+  .hero h1{
+    color:var(--ivory);
+    font-size:clamp(2.2rem, 5vw, 3.5rem);
+    font-style:italic;
+    font-weight:600;
+    margin:.4em 0 .3em;
+  }
+  .hero p.lead{
+    color:#D9D0E8;
+    font-size:1.15rem;
+    max-width:560px;
+    margin:0 auto 2.2em;
+  }
+  .hero-actions{
+    display:flex;
+    gap:16px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-bottom:64px;
+  }
+
+  /* ===== symbols strip (tarot suits) ===== */
+  .symbols-strip{
+    position:relative;
+    z-index:2;
+    background:rgba(0,0,0,0.18);
+    border-top:1px solid rgba(201,162,93,0.25);
+    padding:26px 0;
+  }
+  .symbols-row{
+    display:flex;
+    justify-content:center;
+    gap:56px;
+    flex-wrap:wrap;
+  }
+  .symbol-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    color:var(--gold-light);
+  }
+  .symbol-item .glyph{
+    font-size:1.5rem;
+  }
+  .symbol-item span.label{
+    font-size:.72rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:#D9D0E8;
+  }
+
+  /* ===== Baralho Místico (interativo) ===== */
+  .daily{
+    background:radial-gradient(120% 140% at 50% 100%, #3B2260, var(--midnight));
+    color:var(--ivory);
+    text-align:center;
+  }
+  .daily .section-title{color:var(--ivory);}
+  .daily-inner{ position:relative; z-index:2; }
+  .tarot-deck{
+    display:flex;
+    gap:22px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin:48px 0 36px;
+  }
+  .tarot-card{
+    width:108px;
+    height:176px;
+    perspective:1200px;
+    cursor:pointer;
+  }
+  .tarot-card-inner{
+    position:relative;
+    width:100%;
+    height:100%;
+    transition:transform .6s cubic-bezier(.4,.2,.2,1);
+    transform-style:preserve-3d;
+  }
+  .tarot-card.flipped .tarot-card-inner{
+    transform:rotateY(180deg);
+  }
+  .tarot-card-front, .tarot-card-back{
+    position:absolute;
+    inset:0;
+    border-radius:12px;
+    backface-visibility:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1.5px solid var(--gold);
+    overflow:hidden;
+  }
+  .tarot-card-front{
+    background:
+      repeating-linear-gradient(45deg, rgba(201,162,93,0.12) 0 6px, transparent 6px 12px),
+      radial-gradient(circle at 50% 30%, rgba(231,205,147,0.18), transparent 60%),
+      linear-gradient(160deg, #3E2568, var(--midnight));
+    color:var(--gold-light);
+  }
+  .tarot-card-front::before{
+    content:"";
+    position:absolute;
+    inset:7px;
+    border:1px solid rgba(231,205,147,0.55);
+    border-radius:8px;
+  }
+  .tarot-card-front .front-glyph{
+    position:relative;
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    border:1px solid var(--gold-light);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.5rem;
+  }
+  .tarot-card-front .corner{
+    position:absolute;
+    font-size:.6rem;
+    color:var(--gold-light);
+    opacity:.75;
+  }
+  .tarot-card-front .corner.tl{ top:12px; left:12px; }
+  .tarot-card-front .corner.br{ bottom:12px; right:12px; transform:rotate(180deg); }
+  .tarot-card-back{
+    background:
+      radial-gradient(circle at 50% 18%, rgba(201,162,93,0.22), transparent 55%),
+      linear-gradient(165deg, var(--ivory), var(--beige) 70%, #EADFC4);
+    color:var(--deep-purple);
+    transform:rotateY(180deg);
+    flex-direction:column;
+    gap:5px;
+    padding:14px 10px 10px;
+    text-align:center;
+  }
+  .tarot-card-back::before{
+    content:"";
+    position:absolute;
+    inset:7px;
+    border:1px solid rgba(201,162,93,0.55);
+    border-radius:8px;
+    pointer-events:none;
+  }
+  .tarot-card-back .mini-label{
+    font-family:'Cinzel', 'Lora', serif;
+    font-size:.52rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:600;
+  }
+  .tarot-card-back .back-text{
+    font-size:.66rem;
+    line-height:1.35;
+    color:var(--ink);
+    display:block;
+    overflow-y:auto;
+    max-height:118px;
+    padding:0 2px;
+  }
+  .tarot-card:hover .tarot-card-inner{
+    transform:translateY(-6px);
+  }
+  .tarot-card.flipped:hover .tarot-card-inner{
+    transform:rotateY(180deg) translateY(-6px);
+  }
+  .tarot-result{
+    max-width:520px;
+    margin:0 auto;
+    text-align:center;
+    min-height:110px;
+  }
+  .tarot-result h3{
+    color:var(--gold-light);
+    font-style:italic;
+    font-size:1.25rem;
+    min-height:1.4em;
+  }
+  .tarot-result p{
+    color:#D9D0E8;
+    font-size:.96rem;
+  }
+  .tarot-disclaimer{
+    display:inline-block;
+    margin-top:6px;
+    font-size:.78rem;
+    color:#B9AFCB;
+    border-top:1px dashed rgba(201,162,93,0.35);
+    padding-top:10px;
+  }
+
+  /* ===== About ===== */
+  .about{
+    background:var(--ivory);
+  }
+  .about-grid{
+    display:grid;
+    grid-template-columns:1fr 1.15fr;
+    gap:60px;
+    align-items:center;
+    position:relative;
+    z-index:2;
+  }
+  .about-art{
+    position:relative;
+    border-radius:var(--radius);
+    background:
+      radial-gradient(circle at 30% 20%, rgba(201,162,93,0.25), transparent 55%),
+      linear-gradient(160deg,#3E2568,var(--deep-purple));
+    aspect-ratio:4/5;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+    border:1px solid var(--gold-dim);
+  }
+  .about-art .desc{
+    position:absolute;
+    bottom:0;left:0;right:0;
+    padding:16px 20px;
+    font-size:.78rem;
+    letter-spacing:.03em;
+    color:#D9D0E8;
+    background:linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+  }
+  .candle-scene{
+    position:relative;
+    width:70%;
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    z-index:2;
+  }
+  .candle{
+    width:10px;
+    height:70px;
+    background:linear-gradient(#F3EAD9,#E7CD93);
+    border-radius:3px 3px 1px 1px;
+    position:relative;
+  }
+  .candle::before{
+    content:"";
+    position:absolute;
+    top:-14px;left:50%;
+    transform:translateX(-50%);
+    width:8px;height:14px;
+    background:radial-gradient(circle, #FFE9A8, #E7A93B 70%, transparent);
+    border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+    animation:flicker 2.2s ease-in-out infinite;
+    filter:blur(.2px);
+  }
+  @keyframes flicker{
+    0%,100%{opacity:.85;transform:translateX(-50%) scale(1);}
+    50%{opacity:1;transform:translateX(-50%) scale(1.08) rotate(2deg);}
+  }
+  .about-art .zodiac-ring{ top:50%; left:50%; margin:-110px 0 0 -110px; }
+  .about-text{ position:relative; }
+  .about-text ul{
+    padding-left:20px;
+    color:var(--ink-soft);
+    list-style:none;
+    margin:0 0 0 0;
+  }
+  .about-text li{
+    margin-bottom:12px;
+    position:relative;
+    padding-left:26px;
+  }
+  .about-text li::before{
+    content:"✦";
+    position:absolute;
+    left:0;top:1px;
+    color:var(--gold);
+    font-size:.85rem;
+  }
+  .ethics-pill{
+    display:inline-block;
+    margin-top:18px;
+    padding:8px 18px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    font-size:.82rem;
+    color:var(--deep-blue);
+    background:rgba(27,42,74,0.05);
+  }
+  .why-row{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+    margin-top:34px;
+  }
+  .why-item{
+    text-align:center;
+    padding:18px 10px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    background:var(--beige);
+  }
+  .why-item .glyph{ font-size:1.4rem; color:var(--gold); display:block; margin-bottom:8px; }
+  .why-item span.t{ font-size:.85rem; color:var(--ink-soft); }
+
+  /* ===== Pricing ===== */
+  .pricing{
+    background:
+      radial-gradient(circle at 15% 15%, rgba(201,162,93,0.12), transparent 40%),
+      radial-gradient(circle at 85% 85%, rgba(46,26,71,0.08), transparent 45%),
+      linear-gradient(180deg, var(--beige), #EFE3CC);
+    position:relative;
+  }
+  .price-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));
+    gap:22px;
+    margin-top:50px;
+    position:relative;
+    z-index:2;
+  }
+  .price-card{
+    background:var(--ivory);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:30px 26px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(46,26,71,0.06);
+    transition:transform .3s ease, box-shadow .3s ease;
+    position:relative;
+  }
+  .price-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(46,26,71,0.14);}
+  .price-card .icon{font-size:1.7rem;margin-bottom:10px;}
+  .price-card h3{
+    font-size:1.05rem;
+    margin-bottom:14px;
+    min-height:2.6em;
+  }
+  .price-card .price{
+    font-family:'Playfair Display', serif;
+    font-size:2rem;
+    color:var(--gold);
+    font-weight:700;
+    display:block;
+    margin-bottom:6px;
+  }
+  .price-card .price small{
+    font-size:.9rem;
+    color:var(--ink-soft);
+    font-weight:400;
+  }
+  .price-card.featured{
+    border:1px solid var(--gold);
+    background:linear-gradient(165deg, #FBF3E3, var(--ivory));
+  }
+  .price-card.featured::before{
+    content:"MAIS PROCURADO";
+    position:absolute;
+    top:-12px;left:50%;
+    transform:translateX(-50%);
+    background:var(--gold);
+    color:var(--midnight);
+    font-size:.65rem;
+    letter-spacing:.08em;
+    padding:5px 14px;
+    border-radius:999px;
+    font-weight:700;
+  }
+  .price-card p.desc{
+    font-size:.88rem;
+    color:var(--ink-soft);
+    margin:0 0 16px;
+  }
+  .promo-box{
+    margin-top:46px;
+    background:var(--deep-purple);
+    color:var(--ivory);
+    border-radius:var(--radius);
+    padding:36px 40px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:28px;
+    align-items:center;
+    justify-content:space-between;
+    box-shadow:var(--shadow);
+    position:relative;
+    overflow:hidden;
+    z-index:2;
+  }
+  .promo-box .stars{ z-index:0; }
+  .promo-box > *{ position:relative; z-index:1; }
+  .promo-box h3{
+    color:var(--gold-light);
+    margin-bottom:6px;
+  }
+  .promo-box p{color:#D9D0E8;margin:0;font-size:.95rem;}
+  .promo-items{
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+  }
+  .promo-item{
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(201,162,93,0.4);
+    border-radius:12px;
+    padding:16px 22px;
+    text-align:center;
+    min-width:160px;
+  }
+  .promo-item .p-price{
+    font-family:'Playfair Display', serif;
+    color:var(--gold-light);
+    font-size:1.5rem;
+    font-weight:700;
+  }
+  .price-note{
+    margin-top:26px;
+    font-size:.85rem;
+    color:var(--ink-soft);
+    text-align:center;
+    position:relative;
+    z-index:2;
+  }
+
+  /* ===== Promoção em destaque ===== */
+  .promo-highlight{
+    background:radial-gradient(120% 140% at 50% 0%, #4A2A78, var(--midnight));
+    color:var(--ivory);
+    text-align:center;
+  }
+  .promo-highlight .section-title{ color:var(--ivory); }
+  .promo-highlight-inner{ position:relative; z-index:2; }
+  .promo-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 20px;
+    border-radius:999px;
+    background:linear-gradient(135deg, var(--gold-light), var(--gold));
+    color:var(--midnight);
+    font-family:'Cinzel', 'Lora', serif;
+    font-weight:700;
+    letter-spacing:.08em;
+    font-size:.78rem;
+    text-transform:uppercase;
+    box-shadow:0 0 0 6px rgba(201,162,93,0.15), 0 12px 26px rgba(0,0,0,0.35);
+    animation:badgePulse 2.4s ease-in-out infinite;
+    margin-bottom:6px;
+  }
+  @keyframes badgePulse{
+    0%,100%{ box-shadow:0 0 0 6px rgba(201,162,93,0.15), 0 12px 26px rgba(0,0,0,0.35); }
+    50%{ box-shadow:0 0 0 10px rgba(201,162,93,0.25), 0 14px 30px rgba(0,0,0,0.4); }
+  }
+  .promo-tiles{
+    display:flex;
+    justify-content:center;
+    gap:26px;
+    flex-wrap:wrap;
+    margin-top:44px;
+  }
+  .promo-tile{
+    position:relative;
+    background:rgba(255,255,255,0.06);
+    border:1.5px solid rgba(201,162,93,0.4);
+    border-radius:var(--radius);
+    padding:34px 40px;
+    min-width:220px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    transition:transform .3s ease, box-shadow .3s ease;
+  }
+  .promo-tile:hover{ transform:translateY(-6px); }
+  .promo-tile.highlight{
+    border-color:var(--gold);
+    background:linear-gradient(165deg, rgba(231,205,147,0.16), rgba(255,255,255,0.05));
+    box-shadow:0 0 0 6px rgba(201,162,93,0.1), var(--shadow);
+    transform:scale(1.06);
+  }
+  .promo-tile .tile-tag{
+    position:absolute;
+    top:-13px;
+    background:var(--gold);
+    color:var(--midnight);
+    font-size:.65rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    font-weight:700;
+    padding:5px 14px;
+    border-radius:999px;
+  }
+  .promo-tile .tile-label{
+    color:var(--gold-light);
+    font-size:.9rem;
+    letter-spacing:.03em;
+    max-width:200px;
+  }
+  .promo-tile .tile-price{
+    font-family:'Playfair Display', serif;
+    font-size:2.4rem;
+    font-weight:700;
+    color:var(--ivory);
+  }
+
+  /* ===== How it works ===== */
+  .how{
+    background:var(--ivory);
+  }
+  .steps{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:30px;
+    margin-top:50px;
+  }
+  .step{
+    position:relative;
+    padding:36px 26px 26px;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    background:var(--beige);
+    text-align:center;
+  }
+  .step-number{
+    width:46px;height:46px;
+    margin:0 auto 16px;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--gold-light), var(--gold));
+    color:var(--midnight);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Playfair Display', serif;
+    font-weight:700;
+    font-size:1.15rem;
+  }
+  .step h3{font-size:1.1rem;}
+  .step p{color:var(--ink-soft);font-size:.95rem;margin:0;}
+  @media(min-width:860px){
+    .steps{position:relative;}
+    .step:not(:last-child)::after{
+      content:"→";
+      position:absolute;
+      right:-26px;top:50%;
+      transform:translateY(-50%);
+      color:var(--gold);
+      font-size:1.3rem;
+    }
+  }
+
+  /* ===== Depoimentos (cartas viradas) ===== */
+  .testimonials{
+    background:var(--deep-purple);
+    color:var(--ivory);
+  }
+  .testimonials .section-title{ color:var(--ivory); }
+  .testi-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
+    margin-top:50px;
+    position:relative;
+    z-index:2;
+  }
+  .testi-card{
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(201,162,93,0.3);
+    border-radius:var(--radius);
+    padding:26px 24px;
+    position:relative;
+  }
+  .testi-card .quote-mark{
+    font-family:'Playfair Display', serif;
+    font-size:2.2rem;
+    color:var(--gold);
+    line-height:1;
+    margin-bottom:6px;
+    display:block;
+  }
+  .testi-card p{ color:#E4DCF0; font-size:.95rem; margin:0 0 14px; }
+  .testi-card .who{ color:var(--gold-light); font-size:.82rem; letter-spacing:.05em; }
+
+  /* ===== Avisos ===== */
+  .notice{
+    background:var(--deep-blue);
+    color:var(--ivory);
+  }
+  .notice-box{
+    border:1px solid rgba(231,205,147,0.35);
+    border-radius:var(--radius);
+    padding:36px 40px;
+    background:rgba(255,255,255,0.04);
+    position:relative;
+    z-index:2;
+  }
+  .notice-box h2{color:var(--gold-light);}
+  .notice-box ul{
+    padding-left:20px;
+    color:#DCE2EE;
+    margin:0;
+  }
+  .notice-box li{margin-bottom:12px;}
+
+  /* ===== Contato ===== */
+  .contact{
+    background:radial-gradient(120% 140% at 50% 0%, #3B2260, var(--midnight));
+    color:var(--ivory);
+    text-align:center;
+  }
+  .contact h2{color:var(--ivory);}
+  .contact .section-intro{margin:0 auto 30px;color:#D9D0E8;}
+  .phone-display{
+    display:inline-flex;
+    align-items:center;
+    gap:14px;
+    background:rgba(255,255,255,0.06);
+    border:1px solid var(--gold);
+    padding:20px 34px;
+    border-radius:999px;
+    font-family:'Playfair Display', serif;
+    font-size:1.5rem;
+    color:var(--gold-light);
+    margin-bottom:28px;
+    position:relative;
+    z-index:2;
+  }
+  .contact-hours{
+    position:relative;
+    z-index:2;
+    color:#C9BEDD;
+    font-size:.9rem;
+    letter-spacing:.03em;
+  }
+
+  /* ===== Footer ===== */
+  footer{
+    background:var(--midnight);
+    color:#B9AFCB;
+    padding:40px 0 28px;
+    text-align:center;
+    font-size:.82rem;
+    position:relative;
+    z-index:2;
+    border-top:1px solid rgba(201,162,93,0.2);
+  }
+  footer .brand{ justify-content:center; margin-bottom:10px; }
+  footer .foot-links{
+    display:flex;
+    justify-content:center;
+    gap:22px;
+    margin:14px 0;
+    flex-wrap:wrap;
+  }
+  footer .foot-links a{ color:var(--gold-light); }
+  footer .foot-links a:hover{ text-decoration:underline; }
+
+  /* ===== Crystal ball floating contact (com Agendar) ===== */
+  .crystal-wrap{
+    position:fixed;
+    bottom:24px;right:24px;
+    z-index:200;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .crystal-tooltip{
+    background:var(--midnight);
+    color:var(--gold-light);
+    font-family:'Lora', serif;
+    font-size:.8rem;
+    padding:8px 14px;
+    border-radius:10px;
+    border:1px solid var(--gold-dim);
+    white-space:nowrap;
+    opacity:0;
+    transform:translateX(6px);
+    transition:opacity .25s ease, transform .25s ease;
+    pointer-events:none;
+  }
+  .crystal-wrap:hover .crystal-tooltip{ opacity:1; transform:translateX(0); }
+  .crystal-ball{
+    position:relative;
+    width:72px;height:72px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+      radial-gradient(circle at 32% 28%, rgba(255,255,255,0.55), rgba(231,205,147,0.25) 35%, rgba(62,37,104,0.9) 68%, rgba(21,12,38,0.95) 100%);
+    border:1.5px solid var(--gold);
+    box-shadow:0 0 0 6px rgba(201,162,93,0.12), 0 14px 30px rgba(0,0,0,0.45), inset 0 0 20px rgba(255,255,255,0.25);
+    cursor:pointer;
+    text-decoration:none;
+    animation:orbGlow 3.6s ease-in-out infinite;
+    flex-direction:column;
+    gap:1px;
+  }
+  .crystal-ball .agendar-label{
+    font-family:'Cinzel', 'Lora', serif;
+    font-size:.58rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--gold-light);
+    font-weight:600;
+    text-shadow:0 1px 4px rgba(0,0,0,0.6);
+  }
+  .crystal-ball .agendar-icon{
+    font-size:1.05rem;
+    line-height:1;
+  }
+  .crystal-ball::after{
+    content:"";
+    position:absolute;
+    inset:-6px;
+    border-radius:50%;
+    border:1px dashed rgba(201,162,93,0.5);
+    animation:spin 18s linear infinite;
+  }
+  @keyframes orbGlow{
+    0%,100%{ box-shadow:0 0 0 6px rgba(201,162,93,0.12), 0 14px 30px rgba(0,0,0,0.45), inset 0 0 20px rgba(255,255,255,0.25); }
+    50%{ box-shadow:0 0 0 10px rgba(201,162,93,0.2), 0 14px 34px rgba(0,0,0,0.5), inset 0 0 26px rgba(255,255,255,0.35); }
+  }
+  .crystal-base{
+    position:absolute;
+    bottom:-6px;left:50%;
+    transform:translateX(-50%);
+    width:44px;height:8px;
+    background:linear-gradient(180deg, var(--gold), #8a6a34);
+    border-radius:0 0 10px 10px;
+    z-index:-1;
+  }
+
+  @media(max-width:600px){
+    .about-grid{ grid-template-columns:1fr; }
+    .why-row{ grid-template-columns:1fr; }
+    .steps{ grid-template-columns:1fr; }
+    .testi-grid{ grid-template-columns:1fr; }
+    .step:not(:last-child)::after{ display:none; }
+    .crystal-ball{ width:60px; height:60px; }
+    .crystal-ball .agendar-label{ font-size:.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== HEADER ===================== -->
+<header>
+  <div class="nav-wrap">
+    <a href="#inicio" class="brand"><span class="moon">☽</span> Cartomante <span class="moon">☾</span></a>
+    <nav id="mainNav">
+      <ul>
+        <li><a href="#inicio">Início</a></li>
+        <li><a href="#baralho-mistico">Baralho Místico</a></li>
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#precos">Consultas</a></li>
+        <li><a href="#como-funciona">Como Funciona</a></li>
+        <li><a href="#avisos">Avisos</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+    </nav>
+    <button class="menu-toggle" onclick="document.getElementById('mainNav').classList.toggle('open')" aria-label="Abrir menu">☰</button>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="inicio">
+  <div class="stars" id="heroStars"></div>
+  <div class="card-scatter">
+    <div class="scatter-card p1" data-suit="♠"><span class="idx tl">A</span><span class="idx br">A</span></div>
+    <div class="scatter-card p2 small" data-suit="♥"><span class="idx tl">Q</span><span class="idx br">Q</span></div>
+    <div class="scatter-card p3" data-suit="☉"><span class="idx tl">XIX</span><span class="idx br">XIX</span></div>
+    <div class="scatter-card p4 small" data-suit="♦"><span class="idx tl">K</span><span class="idx br">K</span></div>
+    <div class="scatter-card p5 small" data-suit="♣"><span class="idx tl">J</span><span class="idx br">J</span></div>
+    <div class="scatter-card p8" data-suit="☾"><span class="idx tl">XVIII</span><span class="idx br">XVIII</span></div>
+  </div>
+  <div class="container hero-content">
+    <p class="hero-tagline">Cartomante — Magia e Sabedoria nas Cartas</p>
+    <span class="eyebrow">Tarô · Cartomancia · Orientação</span>
+    <h1>As cartas revelam o que o coração já sussurra</h1>
+    <p class="lead">Consultas conduzidas com ética, respeito e escuta atenta. Aqui você encontra clareza para suas perguntas — sem promessas vazias, apenas leitura honesta das cartas.</p>
+    <div class="hero-actions">
+      <a href="#precos" class="btn btn-primary">✦ Ver Consultas</a>
+    </div>
+  </div>
+  <div class="symbols-strip">
+    <div class="container symbols-row">
+      <div class="symbol-item"><span class="glyph">♦</span><span class="label">Copas</span></div>
+      <div class="symbol-item"><span class="glyph">⚔</span><span class="label">Espadas</span></div>
+      <div class="symbol-item"><span class="glyph">✦</span><span class="label">Ouros</span></div>
+      <div class="symbol-item"><span class="glyph">☘</span><span class="label">Paus</span></div>
+      <div class="symbol-item"><span class="glyph">☉</span><span class="label">Arcanos Maiores</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BARALHO MÍSTICO ===================== -->
+<section class="section daily" id="baralho-mistico">
+  <div class="stars"></div>
+  <div class="card-scatter">
+    <div class="scatter-card p1 small" data-suit="♦"><span class="idx tl">10</span><span class="idx br">10</span></div>
+    <div class="scatter-card p4" data-suit="✦"><span class="idx tl">I</span><span class="idx br">I</span></div>
+    <div class="scatter-card p6 small" data-suit="♣"><span class="idx tl">7</span><span class="idx br">7</span></div>
+    <div class="scatter-card p7" data-suit="♥"><span class="idx tl">A</span><span class="idx br">A</span></div>
+  </div>
+  <div class="deco-corner top-left">
+    <div class="deco-card dark c1" data-glyph="XVII" style="--r:-14deg;" aria-hidden="true">★</div>
+    <div class="deco-card dark c2" data-glyph="IX" style="--r:8deg;" aria-hidden="true">☽</div>
+  </div>
+  <div class="container daily-inner" style="text-align:center;">
+    <span class="eyebrow">Só por Diversão</span>
+    <h2 class="section-title">Vire uma carta do baralho místico</h2>
+    <p class="section-intro" style="margin:0 auto;">Isso é só uma pausa curiosa antes ou depois da sua consulta — não tem nenhuma relação com sua leitura pessoal. Vire uma carta e descubra uma curiosidade sobre o universo do tarô.</p>
+
+    <div class="tarot-deck" id="tarotDeck">
+      <div class="tarot-card" data-idx="0" onclick="virarCarta(this)">
+        <div class="tarot-card-inner">
+          <div class="tarot-card-front"><span class="corner tl">☽</span><span class="front-glyph">☽</span><span class="corner br">☽</span></div>
+          <div class="tarot-card-back"><span class="mini-label">Curiosidade</span><span class="back-text"></span></div>
+        </div>
+      </div>
+      <div class="tarot-card" data-idx="1" onclick="virarCarta(this)">
+        <div class="tarot-card-inner">
+          <div class="tarot-card-front"><span class="corner tl">✦</span><span class="front-glyph">✦</span><span class="corner br">✦</span></div>
+          <div class="tarot-card-back"><span class="mini-label">Curiosidade</span><span class="back-text"></span></div>
+        </div>
+      </div>
+      <div class="tarot-card" data-idx="2" onclick="virarCarta(this)">
+        <div class="tarot-card-inner">
+          <div class="tarot-card-front"><span class="corner tl">☉</span><span class="front-glyph">☉</span><span class="corner br">☉</span></div>
+          <div class="tarot-card-back"><span class="mini-label">Curiosidade</span><span class="back-text"></span></div>
+        </div>
+      </div>
+      <div class="tarot-card" data-idx="3" onclick="virarCarta(this)">
+        <div class="tarot-card-inner">
+          <div class="tarot-card-front"><span class="corner tl">☾</span><span class="front-glyph">☾</span><span class="corner br">☾</span></div>
+          <div class="tarot-card-back"><span class="mini-label">Curiosidade</span><span class="back-text"></span></div>
+        </div>
+      </div>
+      <div class="tarot-card" data-idx="4" onclick="virarCarta(this)">
+        <div class="tarot-card-inner">
+          <div class="tarot-card-front"><span class="corner tl">⚚</span><span class="front-glyph">⚚</span><span class="corner br">⚚</span></div>
+          <div class="tarot-card-back"><span class="mini-label">Curiosidade</span><span class="back-text"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tarot-result" id="tarotResult">
+      <h3 id="tarotTitle">Clique em uma carta para virar</h3>
+      <p id="tarotText">Cada carta guarda uma curiosidade diferente sobre o tarô.</p>
+      <span class="tarot-disclaimer">Este é só um momento de curiosidade — não representa uma leitura sobre você.</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider on-dark"><span class="glyph">✦ ✦ ✦</span></div>
+
+<!-- ===================== SOBRE ===================== -->
+<section class="section about" id="sobre">
+  <div class="deco-corner top-right">
+    <div class="deco-card float c3" data-glyph="II" style="--r:10deg;" aria-hidden="true">☾</div>
+  </div>
+  <div class="deco-corner bottom-left">
+    <div class="deco-card float c1" data-glyph="VI" style="--r:-12deg;" aria-hidden="true">♥</div>
+  </div>
+  <div class="container about-grid">
+    <div class="about-art">
+      <div class="zodiac-ring">
+        <span style="top:6px;left:50%;">♈</span>
+        <span style="right:14px;top:38px;">♉</span>
+        <span style="right:6px;bottom:38px;">♊</span>
+        <span style="bottom:6px;left:50%;">♋</span>
+        <span style="left:14px;bottom:38px;">♌</span>
+        <span style="left:6px;top:38px;">♍</span>
+      </div>
+      <div class="candle-scene">
+        <div class="candle"></div>
+        <div class="candle" style="height:88px;"></div>
+        <div class="candle"></div>
+      </div>
+      <span class="desc">Ambiente de consulta — silêncio, vela e cartas.</span>
+    </div>
+    <div class="about-text">
+      <span class="eyebrow">Sobre a Cartomante</span>
+      <h2 class="section-title">Leitura das cartas com responsabilidade</h2>
+      <p style="color:var(--ink-soft);">Há anos dedicados ao estudo do tarô e da cartomancia, ofereço um espaço de escuta onde a técnica encontra o cuidado com a pessoa do outro lado das cartas.</p>
+      <ul>
+        <li>Consultas individuais, sigilosas e sem julgamento</li>
+        <li>Perguntas objetivas para respostas rápidas e diretas</li>
+        <li>Leituras detalhadas para questões mais profundas</li>
+        <li>Jogos especiais: Taça do Amor e Templo de Afrodite / Templo do Diabo</li>
+      </ul>
+      <span class="ethics-pill">🕊 Ética e respeito em cada consulta</span>
+
+      <div class="why-row">
+        <div class="why-item"><span class="glyph">🕯</span><span class="t">Ambiente sagrado</span></div>
+        <div class="why-item"><span class="glyph">🤝</span><span class="t">Acolhimento sem julgamento</span></div>
+        <div class="why-item"><span class="glyph">🔒</span><span class="t">Sigilo garantido</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><span class="glyph">☽ ✦ ☾</span></div>
+
+<!-- ===================== PREÇOS / CONSULTAS ===================== -->
+<section class="section pricing" id="precos">
+  <div class="deco-corner top-left">
+    <div class="deco-card float c1" data-glyph="V" style="--r:-16deg;" aria-hidden="true">✦</div>
+  </div>
+  <div class="deco-corner bottom-right">
+    <div class="deco-card float c3" data-glyph="XI" style="--r:14deg;" aria-hidden="true">⚖</div>
+  </div>
+  <div class="container">
+    <span class="eyebrow">Consultas</span>
+    <h2 class="section-title">Escolha o tipo de leitura ideal para o momento</h2>
+    <p class="section-intro">Cada jogo tem um propósito. Veja abaixo qual consulta melhor atende à sua necessidade agora.</p>
+
+    <div class="price-grid">
+      <div class="price-card">
+        <span class="icon">🎯</span>
+        <h3>Pergunta Objetiva</h3>
+        <p class="desc">Resposta rápida e direta para uma questão específica.</p>
+        <span class="price">R$ 3<small>/pergunta</small></span>
+        <a href="https://wa.me/554199284184" class="btn btn-primary" target="_blank" rel="noopener" style="width:100%;justify-content:center;">Consultar</a>
+      </div>
+
+      <div class="price-card featured">
+        <span class="icon">📜</span>
+        <h3>Pergunta Detalhada</h3>
+        <p class="desc">Análise completa do cenário, causas e caminhos possíveis.</p>
+        <span class="price">R$ 7<small>/pergunta</small></span>
+        <a href="https://wa.me/554199284184" class="btn btn-primary" target="_blank" rel="noopener" style="width:100%;justify-content:center;">Consultar</a>
+      </div>
+
+      <div class="price-card">
+        <span class="icon">💞</span>
+        <h3>Taça do Amor <small style="font-size:.7rem;color:var(--ink-soft);display:block;font-weight:400;">(Método Novo)</small></h3>
+        <p class="desc">Jogo dedicado às questões afetivas e relacionamentos.</p>
+        <span class="price">R$ 15<small>/consulta</small></span>
+        <a href="https://wa.me/554199284184" class="btn btn-primary" target="_blank" rel="noopener" style="width:100%;justify-content:center;">Consultar</a>
+      </div>
+
+      <div class="price-card">
+        <span class="icon">🌹🔥</span>
+        <h3>Templo de Afrodite / Templo do Diabo</h3>
+        <p class="desc">Mesmo jogo, dois nomes: leitura sobre atração, desafios e obstáculos ocultos.</p>
+        <span class="price">R$ 20<small>/consulta</small></span>
+        <a href="https://wa.me/554199284184" class="btn btn-primary" target="_blank" rel="noopener" style="width:100%;justify-content:center;">Consultar</a>
+      </div>
+    </div>
+    <p class="price-note">Valores sujeitos a alteração conforme a agenda. Consulte disponibilidade ao agendar.</p>
+  </div>
+</section>
+
+<!-- ===================== PROMOÇÃO EM DESTAQUE ===================== -->
+<section class="section promo-highlight" id="promocao">
+  <div class="stars"></div>
+  <div class="card-scatter">
+    <div class="scatter-card p2" data-suit="♠"><span class="idx tl">K</span><span class="idx br">K</span></div>
+    <div class="scatter-card p3 small" data-suit="☾"><span class="idx tl">XVIII</span><span class="idx br">XVIII</span></div>
+    <div class="scatter-card p5" data-suit="♣"><span class="idx tl">Q</span><span class="idx br">Q</span></div>
+  </div>
+  <div class="deco-corner top-left">
+    <div class="deco-card dark c1" data-glyph="X" style="--r:-14deg;" aria-hidden="true">✦</div>
+  </div>
+  <div class="deco-corner bottom-right">
+    <div class="deco-card dark c3" data-glyph="XXI" style="--r:12deg;" aria-hidden="true">☾</div>
+  </div>
+  <div class="container promo-highlight-inner">
+    <span class="promo-badge">🔥 Promoção Especial</span>
+    <h2 class="section-title">Combine perguntas detalhadas e economize</h2>
+    <p class="section-intro" style="margin:0 auto 10px;">Quanto mais você combina, mais vantajoso fica. Aproveite enquanto a promoção está no ar.</p>
+
+    <div class="promo-tiles">
+      <div class="promo-tile">
+        <span class="tile-label">2 Perguntas Detalhadas</span>
+        <span class="tile-price">R$ 10</span>
+        <a href="https://wa.me/554199284184" class="btn btn-primary" target="_blank" rel="noopener">Aproveitar</a>
+      </div>
+      <div class="promo-tile highlight">
+        <span class="tile-tag">Melhor oferta</span>
+        <span class="tile-label">3 Perguntas Detalhadas</span>
+        <span class="tile-price">R$ 13</span>
+        <a href="https://wa.me/554199284184" class="btn btn-primary" target="_blank" rel="noopener">Aproveitar</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== COMO FUNCIONA ===================== -->
+<section class="section how" id="como-funciona">
+  <div class="deco-corner top-right">
+    <div class="deco-card c3" data-glyph="I" style="--r:12deg;" aria-hidden="true">☉</div>
+    <div class="deco-card c4" data-glyph="XIV" style="--r:-10deg;" aria-hidden="true">⚖</div>
+  </div>
+  <div class="container">
+    <span class="eyebrow">Passo a Passo</span>
+    <h2 class="section-title">Como funciona sua consulta</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Escolha o jogo</h3>
+        <p>Defina o tipo de consulta que melhor representa sua dúvida do momento.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>Agende o horário</h3>
+        <p>Envie sua pergunta e combine o melhor dia e horário para a leitura.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Receba sua leitura</h3>
+        <p>As cartas são abertas com atenção e a mensagem é entregue com clareza.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== DEPOIMENTOS ===================== -->
+<section class="section testimonials">
+  <div class="stars"></div>
+  <div class="card-scatter">
+    <div class="scatter-card p1 small" data-suit="♥"><span class="idx tl">J</span><span class="idx br">J</span></div>
+    <div class="scatter-card p4" data-suit="✦"><span class="idx tl">VII</span><span class="idx br">VII</span></div>
+    <div class="scatter-card p6 small" data-suit="♦"><span class="idx tl">A</span><span class="idx br">A</span></div>
+  </div>
+  <div class="deco-corner top-right">
+    <div class="deco-card dark float c3" data-glyph="III" style="--r:12deg;" aria-hidden="true">☘</div>
+  </div>
+  <div class="container">
+    <span class="eyebrow" style="color:var(--gold-light);">Vozes que já ouviram as cartas</span>
+    <h2 class="section-title">O que dizem sobre a consulta</h2>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <span class="quote-mark">”</span>
+        <p>A leitura foi direta e me trouxe clareza para decidir algo que eu vinha adiando há meses.</p>
+        <span class="who">— Consulta de Pergunta Objetiva</span>
+      </div>
+      <div class="testi-card">
+        <span class="quote-mark">”</span>
+        <p>Me senti acolhida durante toda a consulta, sem pressa e sem julgamentos.</p>
+        <span class="who">— Consulta Taça do Amor</span>
+      </div>
+      <div class="testi-card">
+        <span class="quote-mark">”</span>
+        <p>A Leitura Detalhada me ajudou a entender padrões que eu repetia sem perceber.</p>
+        <span class="who">— Leitura Detalhada</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== AVISOS ===================== -->
+<section class="section notice" id="avisos">
+  <div class="container">
+    <div class="notice-box">
+      <span class="eyebrow" style="color:var(--gold-light);">Importante</span>
+      <h2>Avisos e Ética da Consulta</h2>
+      <ul>
+        <li>O tarô é uma ferramenta de autoconhecimento e orientação, não substitui acompanhamento médico, psicológico, jurídico ou financeiro profissional.</li>
+        <li>Todas as consultas são conduzidas com sigilo e respeito à privacidade do consulente.</li>
+        <li>Não são realizadas leituras sobre terceiros sem o consentimento envolvido, nem magias ou promessas de resultado garantido.</li>
+        <li>Reagendamentos devem ser solicitados com antecedência mínima de 24 horas.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CONTATO ===================== -->
+<section class="section contact" id="contato">
+  <div class="stars"></div>
+  <div class="card-scatter">
+    <div class="scatter-card p2 small" data-suit="♣"><span class="idx tl">9</span><span class="idx br">9</span></div>
+    <div class="scatter-card p3" data-suit="☉"><span class="idx tl">XVII</span><span class="idx br">XVII</span></div>
+    <div class="scatter-card p7 small" data-suit="♠"><span class="idx tl">Q</span><span class="idx br">Q</span></div>
+    <div class="scatter-card p8" data-suit="♥"><span class="idx tl">K</span><span class="idx br">K</span></div>
+  </div>
+  <div class="deco-corner bottom-left">
+    <div class="deco-card dark c1" data-glyph="XVIII" style="--r:-14deg;" aria-hidden="true">☾</div>
+  </div>
+  <div class="container">
+    <span class="eyebrow">Fale Comigo</span>
+    <h2 class="section-title">Agende sua consulta</h2>
+    <p class="section-intro">Escolha seu horário e mande sua pergunta. As cartas estão prontas para conversar com você.</p>
+    <a href="https://wa.me/554199284184" class="phone-display" target="_blank" rel="noopener">📞 (41) 99284-184</a>
+    <br>
+    <a href="https://wa.me/554199284184" class="btn btn-primary" target="_blank" rel="noopener">✦ Agendar pelo WhatsApp</a>
+    <p class="contact-hours">Atendimento de terça a sábado · 10h às 20h</p>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="container">
+    <div class="brand"><span class="moon">☽</span> Cartomante <span class="moon">☾</span></div>
+    <div class="foot-links">
+      <a href="#sobre">Sobre</a>
+      <a href="#precos">Consultas</a>
+      <a href="#avisos">Avisos</a>
+      <a href="#contato">Contato</a>
+    </div>
+    <p>© 2026 Cartomante. As cartas orientam, você decide.</p>
+  </div>
+</footer>
+
+<!-- ===================== BOLINHA DE CRISTAL (AGENDAR) ===================== -->
+<div class="crystal-wrap">
+  <span class="crystal-tooltip">Agendar consulta</span>
+  <a href="https://wa.me/554199284184" class="crystal-ball" target="_blank" rel="noopener" aria-label="Agendar consulta">
+    <span class="agendar-icon">🔮</span>
+    <span class="agendar-label">Agendar</span>
+    <span class="crystal-base"></span>
+  </a>
+</div>
+
+<script>
+  // Estrelas aleatórias em todas as seções com classe .stars
+  document.querySelectorAll('.stars').forEach(function(field){
+    const count = 26;
+    for(let i=0;i<count;i++){
+      const s = document.createElement('span');
+      s.style.top = Math.random()*100 + '%';
+      s.style.left = Math.random()*100 + '%';
+      s.style.animationDelay = (Math.random()*4) + 's';
+      s.style.opacity = (0.3 + Math.random()*0.6);
+      field.appendChild(s);
+    }
+  });
+
+  // Baralho de curiosidades — só diversão, sem relação com a consulta de ninguém
+  const curiosidades = [
+    { titulo: "Você sabia?", texto: "O tarô mais famoso, o Rider-Waite, foi publicado em 1909." },
+    { titulo: "Você sabia?", texto: "O baralho de tarô tem 78 cartas no total." },
+    { titulo: "Você sabia?", texto: "Os 4 naipes do tarô inspiraram os naipes do baralho comum." },
+    { titulo: "Você sabia?", texto: "A carta 'O Louco' representa o início de toda jornada." },
+    { titulo: "Você sabia?", texto: "No século XV, o tarô era apenas um jogo de cartas na Itália." },
+    { titulo: "Você sabia?", texto: "A cartomancia também usa baralho comum, sem ser tarô." },
+    { titulo: "Você sabia?", texto: "Cada Arcano Maior representa um arquétipo universal." },
+    { titulo: "Você sabia?", texto: "'Arcano' vem do latim arcanus, que significa 'secreto'." }
+  ];
+
+  function virarCarta(card){
+    document.querySelectorAll('.tarot-card').forEach(c => c.classList.remove('flipped'));
+    const escolha = curiosidades[Math.floor(Math.random() * curiosidades.length)];
+    card.querySelector('.back-text').textContent = escolha.texto;
+    card.classList.add('flipped');
+    document.getElementById('tarotTitle').textContent = escolha.titulo;
+    document.getElementById('tarotText').textContent = escolha.texto;
+  }
+</script>
+
+</body>
+</html>
